@@ -2,7 +2,9 @@ $("body").ready(function () {
     $("#go").on("click", function () {
         isEntryValid($("#url").val(), function (urlInput) {
             console.log(urlInput + " is valid");
-            createShortUrl(urlInput, displayShortUrl);
+            createShortUrl(urlInput, displayShortUrl, function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR, textStatus, errorThrown);
+            });
         }, function (inputUrl) {
             console.log(inputUrl + " is not valid");
             displayErrors()
@@ -20,12 +22,13 @@ function isEntryValid(inputUrl, successCallback, errorCallback) {
     }
 }
 
-function createShortUrl(urlInput, successCallback) {
+function createShortUrl(urlInput, successCallback, errorCallback) {
     $.ajax({
         type: "GET",
         url: "/createUrl/" + urlInput,
         dataType: "json",
-        success: successCallback
+        success: successCallback,
+        error: errorCallback
     });
 }
 

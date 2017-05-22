@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/url');
+mongoose.connect(process.env.MONGOLAB_URL);
 var urlModel = mongoose.model('url', {shortId: String, urlString: String});
 var shortid = require('shortid');
 
@@ -17,6 +17,7 @@ router.get('/createUrl/:url', function (req, res, next) {
             console.log(err);
         } else {
             if (docsFound.length) {
+                console.log("doc sent" + docsFound[0]);
                 res.send(docsFound[0]);
             } else {
                 var newUrl = new urlModel({shortId: shortid.generate(), urlString: req.params.url});
@@ -24,7 +25,8 @@ router.get('/createUrl/:url', function (req, res, next) {
                     if (err) {
                         console.log(err);
                     } else {
-                        res.send(addedDoc[0]);
+                        console.log("doc sent" + addedDoc);
+                        res.send(addedDoc);
                     }
                 });
             }
