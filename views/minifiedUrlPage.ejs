@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/bootstrap.min.css'/>
+    <script src="javascripts/jquery.js"></script>
+    <script src="javascripts/script.js"></script>
+    <script src="javascripts/clipboard.min.js"></script>
+    <script src="javascripts/copyTarget.js"></script>
+</head>
+<body>
+<div class="jumbotron-fluid">
+    <div class="container">
+        <div class="row">
+            <h1 class="display-3"><%= title %></h1>
+        </div>
+        <div class="row">
+            <p>This is the shortened url</p>
+            <input type="text" id="url" value= <%= url.shortenedUrl %>/>
+            <button type="button" class="btn btn-primary" id="copy" data-clipboard-target="#url">Copy!</button>
+        </div>
+        <div class="row">
+            <div><%= url.shortenedUrl %> will redirect to <%= url.originalUrl %></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

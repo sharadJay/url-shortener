@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/bootstrap.min.css'/>
+    <script src="javascripts/jquery.js"></script>
+    <script src="javascripts/script.js"></script>
+</head>
+<body>
+<div class="jumbotron-fluid">
+    <div class="container">
+        <div class="row">
+            <h1 class="display-3"><%= title %></h1>
+        </div>
+        <div class="row">
+            <p>Enter url to be shortened</p>
+            <input type="text" id="url" placeholder="Enter a valid url"/>
+            <button type="button" class="btn btn-primary" id="go">Go!</button>
+        </div>
+        <div class="row">
+            <div><span>Here is your url</span><span>Cool url</span></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
