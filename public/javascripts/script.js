@@ -1,7 +1,7 @@
 $("body").ready(function () {
     $("#go").on("click", function () {
         isEntryValid($("#url").val(), function (urlInput) {
-            console.log(urlInput + " is valid");
+            $(".form-group").removeClass("has-warning");
             createShortUrl(urlInput, displayShortUrl, function (jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR, textStatus, errorThrown);
             });
@@ -38,5 +38,5 @@ function displayShortUrl(data) {
 }
 
 function displayErrors() {
-
+    $(".form-group").addClass("has-warning");
 }
