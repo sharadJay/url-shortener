@@ -43,7 +43,7 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
 db.once('open', function () {
-    URLModel.remove({});
+    URLModel.remove({}).exec();
     CounterModel.remove({}, function () {
         const counter = CounterModel({_id: 'url_count', counter: 10000});
         counter.save(function (err) {
