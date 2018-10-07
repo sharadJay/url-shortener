@@ -4,29 +4,50 @@ if (process.env.NODE_ENV !== 'production') {
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const morgan = require('morgan');
+const addRequestId = require('express-request-id')();
 mongoose.Promise = Promise;
 const btoa = require('btoa');
 const atob = require('atob');
 mongoose.connect(process.env.Connection_String, {
     "useMongoClient": true
 });
+mongoose.set('debug', true);
 const {URLModel, CounterModel} = require('../model/models');
+
+router.use(addRequestId);
+
+morgan.token('id', function getId(req) {
+    return req.id
+});
+
+var loggerFormat = ':id [:date[web]] ":method :url" :status :response-time';
+
+router.use(morgan(loggerFormat, {
+    skip: function (req, res) {
+        return res.statusCode < 400
+    },
+    stream: process.stderr
+}));
+
+router.use(morgan(loggerFormat, {
+    skip: function (req, res) {
+        return res.statusCode >= 400
+    },
+    stream: process.stdout
+}));
+
 
 const db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));
 
 db.once('open', function () {
-    console.log("we're connected!");
-    URLModel.remove({}, function () {
-        console.log('removed all previously saved urls');
-    });
+    URLModel.remove({});
     CounterModel.remove({}, function () {
-        console.log("Counter collection removed");
         const counter = CounterModel({_id: 'url_count', counter: 10000});
         counter.save(function (err) {
             if (err) return console.error(err);
-            console.log('counter inserted');
         })
     })
 });
@@ -42,20 +63,17 @@ router.post('/createUrl/', function (req, res, next) {
     const urlData = req.body.url;
     URLModel.findOne({url: urlData}, function (err, doc) {
         if (doc) {
-            console.log("entry found in db");
             res.send({
                 urlString: doc.url,
                 shortId: btoa(doc._id),
                 status: 200
             })
         } else {
-            console.log('entry NOT found in db, saving new');
             const newUrl = new URLModel({
                 url: urlData,
                 "_id": 10001
             });
             newUrl.save(function (err, addedDoc) {
-                console.log("added dic", addedDoc, err)
                 if (err) console.log(`error saving data ${err}`);
                 res.send({
                     urlString: addedDoc.url,
@@ -72,11 +90,9 @@ router.get('/get/:url', function (req, res, next) {
     const uniqueId = atob(req.params.url);
     console.log(uniqueId)
     URLModel.findById(uniqueId, function (err, doc) {
-        console.log("recieved request", doc);
         if (err) {
             res.render("error");
         } else {
-            console.log("original url" + doc.url);
             res.redirect(301, doc.url);
         }
     })

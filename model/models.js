@@ -14,15 +14,11 @@ const urlSchema = mongoose.Schema({
 });
 
 urlSchema.pre('save', function(next){
-    console.log('running pre save');
     var doc = this;
     CounterModel.findByIdAndUpdate({ _id: 'url_count' }, { $inc: { count: 1 } }, function(err, counter) {
         if(err) return next(err);
-        console.log(counter);
-        console.log(counter.counter);
         doc._id = counter.counter;
         doc.created_at = new Date();
-        console.log(doc);
         next();
     });
 }, );
