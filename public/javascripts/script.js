@@ -24,8 +24,11 @@ function isEntryValid(inputUrl, successCallback, errorCallback) {
 
 function createShortUrl(urlInput, successCallback, errorCallback) {
     $.ajax({
-        type: "GET",
-        url: "/createUrl/" + urlInput,
+        type: "POST",
+        url: "/createUrl/",
+        data: {
+          url: urlInput
+        },
         dataType: "json",
         success: successCallback,
         error: errorCallback
@@ -33,7 +36,6 @@ function createShortUrl(urlInput, successCallback, errorCallback) {
 }
 
 function displayShortUrl(data) {
-    console.log(data);
     document.location.href = "/show?short=" + data.shortId + "&original=" + data.urlString;
 }
 
