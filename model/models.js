@@ -15,7 +15,8 @@ const urlSchema = mongoose.Schema({
 
 urlSchema.pre('save', function(next){
     var doc = this;
-    CounterModel.findByIdAndUpdate({ _id: 'url_count' }, { $inc: { count: 1 } }, function(err, counter) {
+    CounterModel.findByIdAndUpdate('url_count', { $inc: { counter: 1 } }, function(err, counter) {
+        console.log("counter collection",counter);
         if(err) return next(err);
         doc._id = counter.counter;
         doc.created_at = new Date();

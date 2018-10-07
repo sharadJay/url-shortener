@@ -11,4 +11,4 @@ const showHomepage = function (req, res, next) {
     res.render('index', {title: 'URL Shortener'});
 };
 
-module.exports = {showMinfiedUrl, showHomepage}
+module.exports = {showMinfiedUrl, showHomepage};

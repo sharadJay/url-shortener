@@ -36,9 +36,7 @@ router.use(morgan(loggerFormat, {
 // mongoose setup
 
 mongoose.Promise = Promise;
-mongoose.connect(process.env.Connection_String, {
-    "useMongoClient": true
-});
+mongoose.connect(process.env.Connection_String, { useNewUrlParser: true });
 mongoose.set('debug', true);
 
 const db = mongoose.connection;
@@ -46,8 +44,8 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
 db.once('open', function () {
-    URLModel.remove({}).exec();
-    CounterModel.remove({}, function () {
+    URLModel.deleteMany({}).exec();
+    CounterModel.deleteMany({}, function () {
         const counter = CounterModel({_id: 'url_count', counter: 10000});
         counter.save(function (err) {
             if (err) return console.error(err);

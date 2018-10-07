@@ -33,11 +33,12 @@ const getOriginalUrl = function (req, res, next) {
     const uniqueId = atob(req.params.url);
     URLModel.findById(uniqueId, function (err, doc) {
         if (err) {
-            res.render("error");
+            res.render("error", {message: err.message, error: err});
         } else {
-            res.redirect(301, doc.url);
+            console.log(doc.url);
+            res.status(301).redirect(doc.url);
         }
     })
 }
 
-module.exports = {createShortUrl, getOriginalUrl}
+module.exports = {createShortUrl, getOriginalUrl};
